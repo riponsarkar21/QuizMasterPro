@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { MainLayout } from '@/components/layout/main-layout'
 import { Button } from '@/components/ui/button'
@@ -12,8 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Checkbox } from '@/components/ui/checkbox'
 import { AchievementGrid, AchievementStats } from '@/components/achievement/achievement-components'
 import { useAuth } from '@/contexts/auth-context'
-import { ACHIEVEMENTS, getMockUserAchievements, getAchievementsByCategory } from '@/lib/achievements'
-import { UserProfile, UserStatistics, UserAchievement, ChapterStats } from '@/types'
+import { ACHIEVEMENTS, getMockUserAchievements } from '@/lib/achievements'
+import { UserProfile, UserStatistics, UserAchievement } from '@/types'
 import { 
   User, 
   Edit2, 
@@ -28,7 +28,7 @@ import {
   TrendingUp
 } from 'lucide-react'
 
-export default function ProfilePage() {
+function ProfilePageContent() {
   const { user } = useAuth()
   const searchParams = useSearchParams()
   const [isEditing, setIsEditing] = useState(false)
@@ -59,7 +59,7 @@ export default function ProfilePage() {
     }
   }, [searchParams])
 
-  const handleExamSettingsChange = (field: string, value: any) => {
+  const handleExamSettingsChange = (field: string, value: string | number | boolean) => {
     setExamSettings(prev => ({ ...prev, [field]: value }))
   }
   
@@ -574,5 +574,13 @@ export default function ProfilePage() {
         </Tabs>
       </div>
     </MainLayout>
+  )
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProfilePageContent />
+    </Suspense>
   )
 }

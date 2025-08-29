@@ -5,20 +5,17 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { MainLayout } from '@/components/layout/main-layout'
 import { 
   Trophy, 
   Clock, 
-  Target, 
   CheckCircle2, 
   XCircle, 
   Minus,
   BarChart3,
   RefreshCw,
   Home,
-  BookOpen,
   TrendingUp,
   Award
 } from 'lucide-react'

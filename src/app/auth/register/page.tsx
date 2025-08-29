@@ -79,7 +79,7 @@ export default function RegisterPage() {
       } else {
         setErrors({ general: result.error || 'Registration failed' })
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred' })
     }
   }

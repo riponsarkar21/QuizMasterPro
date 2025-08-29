@@ -60,7 +60,7 @@ export default function LoginPage() {
       } else {
         setErrors({ general: result.error || 'Login failed' })
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred' })
     }
   }
@@ -77,7 +77,7 @@ export default function LoginPage() {
       if (result.success) {
         router.push(role === 'student' ? ROUTES.DASHBOARD : ROUTES.ADMIN_DASHBOARD)
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'Demo login failed' })
     }
   }
@@ -196,7 +196,7 @@ export default function LoginPage() {
             </div>
 
             <div className="text-center text-sm">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 href={ROUTES.REGISTER}
                 className="font-medium text-primary hover:underline"

@@ -12,7 +12,6 @@ import {
   BookOpen, 
   BarChart3, 
   Trophy, 
-  Clock, 
   Target,
   TrendingUp,
   Calendar,
@@ -20,7 +19,6 @@ import {
 } from 'lucide-react'
 import { ROUTES } from '@/lib/constants'
 import { calculatePercentage, getGradeColor } from '@/lib/utils'
-import { AchievementGrid } from '@/components/achievement/achievement-components'
 import { ACHIEVEMENTS, getMockUserAchievements } from '@/lib/achievements'
 
 export default function DashboardPage() {
@@ -61,7 +59,7 @@ export default function DashboardPage() {
             Welcome back, {user?.name}! 👋
           </h1>
           <p className="text-muted-foreground">
-            Here's an overview of your learning progress and performance.
+            Here&apos;s an overview of your learning progress and performance.
           </p>
         </div>
 

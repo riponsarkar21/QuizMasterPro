@@ -16,7 +16,7 @@ interface HeaderProps {
 }
 
 export function Header({ className }: HeaderProps) {
-  const { theme, toggleTheme, actualTheme } = useTheme()
+  const { actualTheme, toggleTheme } = useTheme()
   const { user, logout, isAuthenticated } = useAuth()
   const router = useRouter()
   const [showUserMenu, setShowUserMenu] = useState(false)

@@ -19,7 +19,6 @@ import {
 } from 'lucide-react'
 import { Chapter, ChapterFormData } from '@/types'
 import { formatDate, generateId } from '@/lib/utils'
-import { VALIDATION_RULES } from '@/lib/constants'
 
 export default function AdminChaptersPage() {
   // Mock chapters data

@@ -8,21 +8,18 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { MainLayout } from '@/components/layout/main-layout'
-import { useAuth } from '@/contexts/auth-context'
 import { 
   BookOpen, 
-  Clock, 
   Target, 
   Settings, 
   PlayCircle,
   AlertCircle,
   CheckCircle2
 } from 'lucide-react'
-import { ROUTES, EXAM_CONFIG } from '@/lib/constants'
+import { EXAM_CONFIG } from '@/lib/constants'
 import { Chapter, ExamSettings } from '@/types'
 
 export default function ExamSetupPage() {
-  const { user } = useAuth()
   const router = useRouter()
   
   // Mock chapters data

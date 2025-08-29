@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -120,7 +120,7 @@ export function useToggle(initialValue: boolean = false) {
 }
 
 export function usePrevious<T>(value: T): T | undefined {
-  const ref = useRef<T>()
+  const ref = useRef<T | undefined>(undefined)
   
   useEffect(() => {
     ref.current = value
@@ -176,11 +176,23 @@ export function useMediaQuery(query: string): boolean {
 export function useKeyboardShortcut(
   keys: string[],
   callback: (event: KeyboardEvent) => void,
-  dependencies: any[] = []
+  dependencies: unknown[] = []
 ) {
+  const callbackRef = useRef(callback)
+  const keysRef = useRef(keys)
+  
+  // Update refs when values change
+  useEffect(() => {
+    callbackRef.current = callback
+  }, [callback])
+  
+  useEffect(() => {
+    keysRef.current = keys
+  }, [keys])
+
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      const keysPressed = keys.every((key) => {
+      const keysPressed = keysRef.current.every((key) => {
         switch (key) {
           case 'Ctrl':
             return event.ctrlKey
@@ -197,11 +209,12 @@ export function useKeyboardShortcut(
 
       if (keysPressed) {
         event.preventDefault()
-        callback(event)
+        callbackRef.current(event)
       }
     }
 
     document.addEventListener('keydown', handleKeyPress)
     return () => document.removeEventListener('keydown', handleKeyPress)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
 }

@@ -133,15 +133,15 @@ export function Sidebar({ className }: SidebarProps) {
                 <div className="text-sm text-muted-foreground">
                   <div className="flex justify-between">
                     <span>Exams Taken:</span>
-                    <span>{(user as any).totalExamsAttempted || 0}</span>
+                    <span>{(user as { totalExamsAttempted?: number }).totalExamsAttempted || 0}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Average Score:</span>
-                    <span>{Math.round((user as any).averageScore || 0)}%</span>
+                    <span>{Math.round((user as { averageScore?: number }).averageScore || 0)}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Rank:</span>
-                    <span>#{(user as any).rank || 'N/A'}</span>
+                    <span>#{(user as { rank?: string | number }).rank || 'N/A'}</span>
                   </div>
                 </div>
               </div>

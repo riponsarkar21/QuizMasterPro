@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -25,8 +25,8 @@ import { ROUTES } from '@/lib/constants'
 export default function ExamPage() {
   const router = useRouter()
   
-  // Mock questions data
-  const mockQuestions: Question[] = [
+  // Mock questions data - memoized to prevent recreation on every render
+  const mockQuestions: Question[] = useMemo(() => [
     {
       id: '1',
       chapterId: '1',
@@ -69,7 +69,7 @@ export default function ExamPage() {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
-  ]
+  ], []) // Empty dependency array since this is static mock data
 
   const [examSettings, setExamSettings] = useState<ExamSettings | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
@@ -84,7 +84,7 @@ export default function ExamPage() {
 
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(new Set())
 
-  const { time, isRunning, start, pause } = useTimer(3600) // Default 1 hour
+  const { time, start } = useTimer(3600) // Default 1 hour
 
   useEffect(() => {
     // Load exam settings from localStorage
@@ -109,7 +109,7 @@ export default function ExamPage() {
     
     // Start timer
     start()
-  }, [router, start])
+  }, [router, start, mockQuestions])
 
   useEffect(() => {
     // Check if current question is answered
@@ -119,12 +119,39 @@ export default function ExamPage() {
     setShowExplanation(false)
   }, [currentQuestionIndex, answers])
 
+  const handleSubmitExam = React.useCallback(() => {
+    
+    // Calculate results
+    const correctAnswers = answers.filter((answer, index) => 
+      answer === questions[index]?.correctAnswer
+    ).length
+    
+    const examSession: ExamSession = {
+      id: generateId(),
+      studentId: 'current-user-id',
+      chapterIds: examSettings?.selectedChapters || [],
+      questions,
+      answers,
+      startTime: new Date(Date.now() - ((examSettings?.timeLimit || 3600) - time) * 1000),
+      endTime: new Date(),
+      duration: (examSettings?.timeLimit || 3600) - time,
+      isCompleted: true,
+      score: Math.round((correctAnswers / questions.length) * 100),
+      timeSpent: (examSettings?.timeLimit || 3600) - time,
+    }
+
+    // Store results and navigate
+    localStorage.setItem('lastExamSession', JSON.stringify(examSession))
+    localStorage.removeItem('currentExamSettings')
+    router.push('/exam/results')
+  }, [answers, questions, examSettings, time, router])
+
   useEffect(() => {
     // Auto-submit when timer reaches 0
     if (time === 0) {
       handleSubmitExam()
     }
-  }, [time])
+  }, [time, handleSubmitExam])
 
   const handleAnswerSelect = (optionIndex: number) => {
     if (isAnswered && !examSettings?.showExplanations) return
@@ -172,33 +199,6 @@ export default function ExamPage() {
     })
     
     setShowReportSuccess(true)
-  }
-
-  const handleSubmitExam = () => {
-    
-    // Calculate results
-    const correctAnswers = answers.filter((answer, index) => 
-      answer === questions[index]?.correctAnswer
-    ).length
-    
-    const examSession: ExamSession = {
-      id: generateId(),
-      studentId: 'current-user-id',
-      chapterIds: examSettings?.selectedChapters || [],
-      questions,
-      answers,
-      startTime: new Date(Date.now() - ((examSettings?.timeLimit || 3600) - time) * 1000),
-      endTime: new Date(),
-      duration: (examSettings?.timeLimit || 3600) - time,
-      isCompleted: true,
-      score: Math.round((correctAnswers / questions.length) * 100),
-      timeSpent: (examSettings?.timeLimit || 3600) - time,
-    }
-
-    // Store results and navigate
-    localStorage.setItem('lastExamSession', JSON.stringify(examSession))
-    localStorage.removeItem('currentExamSettings')
-    router.push('/exam/results')
   }
 
   const currentQuestion = questions[currentQuestionIndex]

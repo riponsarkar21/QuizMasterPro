@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { User, LoginFormData, RegisterFormData, ApiResponse } from '@/types'
 import { useLocalStorage } from '@/hooks'
-import { STORAGE_KEYS, API_ENDPOINTS } from '@/lib/constants'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 interface AuthContextType {
   user: User | null
@@ -88,7 +88,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setToken(mockToken)
       setUser(mockUser)
       return { success: true, data: mockUser }
-    } catch (error) {
+    } catch {
       return { success: false, error: 'Login failed' }
     } finally {
       setIsLoading(false)
@@ -123,7 +123,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setToken(mockToken)
       setUser(newUser)
       return { success: true, data: newUser }
-    } catch (error) {
+    } catch {
       return { success: false, error: 'Registration failed' }
     } finally {
       setIsLoading(false)

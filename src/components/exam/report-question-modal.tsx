@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input, Label } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { 
   Dialog, 
   DialogContent, 
@@ -14,7 +14,6 @@ import {
 import { MessageSquare, Send, AlertTriangle } from 'lucide-react'
 import { REPORT_REASONS, VALIDATION_RULES } from '@/lib/constants'
 import { ReportFormData, Question } from '@/types'
-import { generateId } from '@/lib/utils'
 
 interface ReportQuestionModalProps {
   question: Question
@@ -73,7 +72,7 @@ export function ReportQuestionModal({
       setFormData({ reason: 'other', description: '' })
       setErrors({})
       onClose()
-    } catch (error) {
+    } catch {
       setErrors({ general: 'Failed to submit report. Please try again.' })
     } finally {
       setIsSubmitting(false)
@@ -214,7 +213,7 @@ export function ReportSuccessNotification({
               Report Submitted
             </h4>
             <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-              Thank you for your feedback. We'll review your report and take appropriate action.
+              Thank you for your feedback. We&apos;ll review your report and take appropriate action.
             </p>
           </div>
           <button

@@ -194,7 +194,7 @@ export interface UserActivity {
   id: string
   type: 'exam_completed' | 'achievement_unlocked' | 'streak_milestone' | 'badge_earned'
   description: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
   timestamp: Date
 }
 
